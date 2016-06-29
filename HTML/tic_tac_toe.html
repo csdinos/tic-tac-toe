@@ -1,0 +1,46 @@
+
+<!DOCTYPE html>
+<html>
+	
+  <head>
+    <meta charset="utf-8">
+    <title></title><link rel="stylesheet" type="text/css" href="../CSS/tic_tac_toe.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  </head>
+  
+  <body>
+	<div class="container">
+		<div class="row">
+			<h1>TIC-TAC-TOE</h1>
+		</div>
+		<div class="row">
+		
+			<table>
+				<tr>
+					<td id="box11" onClick="nextMove(this)"> </td>
+					<td id="box12" onClick="nextMove(this)"> </td>
+					<td id="box13" onClick="nextMove(this)"> </td>
+				</tr>
+				<tr>
+					<td id="box21" onClick="nextMove(this)"> </td>
+					<td id="box22" onClick="nextMove(this)"> </td>
+					<td id="box23" onClick="nextMove(this)"> </td>
+				</tr>
+				<tr>
+					<td id="box31" onClick="nextMove(this)"> </td>
+					<td id="box32" onClick="nextMove(this)"> </td>
+					<td id="box33" onClick="nextMove(this)"> </td>
+				</tr>
+			</table>
+		
+		</div>
+		
+		<div class="row">
+			<button class="btn" type="button" onClick="newGame()">New game</button>
+		</div>
+		
+	</div>
+    
+  </body>
+  <script type="text/javascript" src="../JS/tic_tac_toe.js"></script>
+</html>
