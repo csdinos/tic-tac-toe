@@ -3,21 +3,31 @@
  *  Author: Konstantinos Vlachantonis
  */
 
-// Object that represents the user
+/**
+ * User object
+ */
 var human =
 	{
 		moves: 0,
 		side: 'X',
+    wins: document.getElementById('human'),
 	};
 
-// Object that represents the machine
+
+/**
+ * Machine object
+ */
 var machine =
 	{
 		moves: 0,
 		side: 'O',
+    wins: document.getElementById('machine'),
 	};
 
-// Object that represents the board
+
+/**
+ * Board object
+ */
 var board =
 	{
 		box11: document.getElementById('box11'), box12: document.getElementById('box12'), box13: document.getElementById('box13'),
@@ -25,7 +35,10 @@ var board =
 		box31: document.getElementById('box31'), box32: document.getElementById('box32'), box33: document.getElementById('box33'),
 	};
 
-// Object that represents the game
+
+/**
+ * Game object
+ */
 var game =
 	{
 		turn: 'X',
@@ -70,7 +83,7 @@ function humanMove(box){
 
 	checkBoard();
 
-  if(game.status) machineMove();
+  if(inGame()) machineMove();
 }
 
 /*
@@ -132,7 +145,14 @@ function checkBoard(){
 		game.status = false;
 	}
 
-	if(!game.status){
+	if(!inGame()){
+
+    if(winner === human.side){
+      human.wins.innerHTML = parseInt(human.wins.innerHTML) +1;
+    }
+    else{
+      machine.wins.innerHTML = parseInt(human.wins.innerHTML);
+    }
 
 		// colorWinnerBoxes(winner);
 		window.alert(winner + ' WINS');
