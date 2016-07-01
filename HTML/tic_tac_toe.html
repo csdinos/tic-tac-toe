@@ -9,42 +9,61 @@
   </head>
 
   <body>
-	<div class="container">
+	<div class="container-fluid">
 		<div class="row">
-			<h1>TIC-TAC-TOE</h1>
+      <div class="col-sm-6 col-md-6 col-lg-6">
+			     <h1>TIC-TAC-TOE</h1>
+      </div>
+      <div class="col-sm-6 col-md-6 col-lg-6">
+			     <h1>Stats</h1>
+      </div>
 		</div>
 		<div class="row">
 
-			<table>
-				<tr>
-					<td id="box11" onClick="humanMove(this)"> </td>
-					<td id="box12" onClick="humanMove(this)"> </td>
-					<td id="box13" onClick="humanMove(this)"> </td>
-				</tr>
-				<tr>
-					<td id="box21" onClick="humanMove(this)"> </td>
-					<td id="box22" onClick="humanMove(this)"> </td>
-					<td id="box23" onClick="humanMove(this)"> </td>
-				</tr>
-				<tr>
-					<td id="box31" onClick="humanMove(this)"> </td>
-					<td id="box32" onClick="humanMove(this)"> </td>
-					<td id="box33" onClick="humanMove(this)"> </td>
-				</tr>
-			</table>
+      <div class="col-sm-6 col-md-6 col-lg-6">
+  			<table>
+  				<tr>
+  					<td id="box11" onClick="humanMove(this)"></td>
+  					<td id="box12" onClick="humanMove(this)"></td>
+  					<td id="box13" onClick="humanMove(this)"></td>
+  				</tr>
+  				<tr>
+  					<td id="box21" onClick="humanMove(this)"> </td>
+  					<td id="box22" onClick="humanMove(this)"> </td>
+  					<td id="box23" onClick="humanMove(this)"> </td>
+  				</tr>
+  				<tr>
+  					<td id="box31" onClick="humanMove(this)"> </td>
+  					<td id="box32" onClick="humanMove(this)"> </td>
+  					<td id="box33" onClick="humanMove(this)"> </td>
+  				</tr>
+  			</table>
+      </div>
 
+      <div class="col-sm-6 col-md-6 col-lg-6">
+        <table class='table borderless'>
+          <tr>
+            <td>
+              <span>Corgis:</span>
+            </td>
+            <td>
+              <span id="human">0</span>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <span>Pugs:</span>
+            </td>
+            <td>
+              <span id="machine">0</span>
+            </td>
+          </tr>
+        </table>
+        <br>
+        <button class="btn btn-primary" type="button" onClick="newGame()">New game</button>
+		  </div>
 		</div>
 
-		<div class="row">
-			<button class="btn" type="button" onClick="newGame()">New game</button>
-		</div>
-
-		<div class="row">
-			<span>Corgis:</span>			<span id="human">0</span> <br>
-			<span>Pugs:</span>			<span id="machine">0</span>
-		</div>
-
-	</div>
 
   </body>
   <script type="text/javascript" src="../JS/tic_tac_toe.js"></script>

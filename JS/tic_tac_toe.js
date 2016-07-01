@@ -11,6 +11,7 @@ var human =
 		moves: 0,
 		side: 'X',
     wins: document.getElementById('human'),
+		img: '../pics/corgi.jpg'
 	};
 
 
@@ -22,6 +23,7 @@ var machine =
 		moves: 0,
 		side: 'O',
     wins: document.getElementById('machine'),
+		img: '../pics/pug.jpg'
 	};
 
 
@@ -56,14 +58,19 @@ function newGame(){
 	human.moves = 0;
 	machine.moves = 0;
 
-	board.box11.innerHTML = ' ', board.box12.innerHTML = ' '; board.box13.innerHTML = ' ';
-	board.box21.innerHTML = ' '; board.box22.innerHTML = ' '; board.box23.innerHTML = ' ';
-	board.box31.innerHTML = ' '; board.box32.innerHTML = ' '; board.box33.innerHTML = ' ';
+	board.box11.classList.remove("X","O"); board.box12.classList.remove("X","O"); board.box13.classList.remove("X","O");
+	board.box21.classList.remove("X","O"); board.box22.classList.remove("X","O"); board.box23.classList.remove("X","O");
+	board.box31.classList.remove("X","O"); board.box32.classList.remove("X","O"); board.box33.classList.remove("X","O");
+
+	// temp until we add pics
+	board.box11.removeChild(board.box11.firstChild); board.box12.removeChild(board.box12.firstChild); board.box13.removeChild(board.box13.firstChild);
+	board.box21.removeChild(board.box21.firstChild); board.box22.removeChild(board.box22.firstChild); board.box23.removeChild(board.box23.firstChild);
+	board.box31.removeChild(board.box31.firstChild); board.box32.removeChild(board.box32.firstChild); board.box33.removeChild(board.box33.firstChild);
 
 	// remove background color from winning boxes
-	for(var box in board) {
-		board[box].classList.remove("win");
-	}
+	// for(var box in board) {
+	// 	board[box].classList.remove("win");
+	// }
 
   if(game.turn === machine.side){
     machineMove();
@@ -76,9 +83,10 @@ function newGame(){
  */
 function humanMove(box){
 
-	if(box.innerHTML!=' ' || !inGame()) return;
+	if(!isEmpty(box) || !inGame()) return;
 
-	box.innerHTML = human.side;
+	makeMove(human,box);
+
 	game.turn = machine.side;
 
 	checkBoard();
@@ -97,51 +105,51 @@ function checkBoard(){
 	var winner = null;
 
 	// check first row
-	if( board.box11.innerHTML != ' ' && board.box11.innerHTML === board.box12.innerHTML && board.box12.innerHTML === board.box13.innerHTML){
+	if( !isEmpty(board.box11) && checkClass(board.box11, board.box12, board.box13)){
 
-		winner = board.box11.innerHTML === 'X' ? 'X' : 'O';
+		winner = board.box11.classList.contains('X') ? 'X' : 'O';
 		game.status = false;
 	}
 	// check second row
-	else if( board.box21.innerHTML != ' ' && board.box21.innerHTML === board.box22.innerHTML && board.box22.innerHTML === board.box23.innerHTML){
+	else if( !isEmpty(board.box21) && checkClass(board.box21, board.box22, board.box23)){
 
-		winner = board.box21.innerHTML === 'X' ? 'X' : 'O';
+		winner = board.box21.classList.contains('X') ? 'X' : 'O';
 		game.status = false;
 	}
 	// check third row
-	else if( board.box31.innerHTML != ' ' && board.box31.innerHTML === board.box32.innerHTML && board.box32.innerHTML === board.box33.innerHTML){
+	else if( !isEmpty(board.box31) && checkClass(board.box31, board.box32, board.box33)){
 
-		winner = board.box31.innerHTML === 'X' ? 'X' : 'O';
+		winner = board.box31.classList.contains('X') ? 'X' : 'O';
 		game.status = false;
 	}
 	// check first column
-	else if( board.box11.innerHTML != ' ' && board.box11.innerHTML === board.box21.innerHTML && board.box21.innerHTML === board.box31.innerHTML){
+	else if( !isEmpty(board.box11) && checkClass(board.box11, board.box21, board.box31)){
 
-		winner = board.box11.innerHTML === 'X' ? 'X' : 'O';
+		winner = board.box11.classList.contains('X') ? 'X' : 'O';
 		game.status = false;
 	}
 	// check second column
-	else if( board.box12.innerHTML != ' ' && board.box12.innerHTML === board.box22.innerHTML && board.box22.innerHTML === board.box32.innerHTML){
+	else if( !isEmpty(board.box12) && checkClass(board.box12, board.box22, board.box32)){
 
-		winner = board.box12.innerHTML === 'X' ? 'X' : 'O';
+		winner = board.box12.classList.contains('X') ? 'X' : 'O';
 		game.status = false;
 	}
 	// check third column
-	else if( board.box13.innerHTML != ' ' && board.box13.innerHTML === board.box23.innerHTML && board.box23.innerHTML === board.box33.innerHTML){
+	else if( !isEmpty(board.box13) && checkClass(board.box13, board.box23, board.box33)){
 
-		winner = board.box13.innerHTML === 'X' ? 'X' : 'O';
+		winner = board.box13.classList.contains('X') ? 'X' : 'O';
 		game.status = false;
 	}
 	// check main diagonal
-	else if( board.box11.innerHTML != ' ' && board.box11.innerHTML === board.box22.innerHTML && board.box22.innerHTML === board.box33.innerHTML){
+	else if( !isEmpty(board.box11) && checkClass(board.box11, board.box22, board.box33)){
 
-		winner = board.box11.innerHTML === 'X' ? 'X' : 'O';
+		winner = board.box11.classList.contains('X') ? 'X' : 'O';
 		game.status = false;
 	}
 	// check other diagonal
-	else if( board.box31.innerHTML != ' ' && board.box31.innerHTML === board.box22.innerHTML && board.box22.innerHTML === board.box13.innerHTML){
+	else if( !isEmpty(board.box31) && checkClass(board.box31, board.box22, board.box13)){
 
-		winner = board.box31.innerHTML === 'X' ? 'X' : 'O';
+		winner = board.box31.classList.contains('X') ? 'X' : 'O';
 		game.status = false;
 	}
 
@@ -165,6 +173,26 @@ function checkBoard(){
 
 
 /**
+ * checkClass - check whether 3 elements have one same class
+ *
+ * @param  {HTML element} box1
+ * @param  {HTML element} box2
+ * @param  {HTML element} box3
+ * @return {boolean}      result
+ */
+function checkClass(box1, box2, box3){
+
+	if( (box1.classList.contains('X') && box2.classList.contains('X') && box3.classList.contains('X'))
+			|| (box1.classList.contains('O') && box2.classList.contains('O') && box3.classList.contains('O')) ){
+
+		return true;
+	}
+
+	return false;
+}
+
+
+/**
  * checkIfTie - Checks whether all board has been filled up.
  * Since it's used after checkBoard() for winner we can safely assume that
  * a fully filled board = TIE game
@@ -176,7 +204,8 @@ function checkIfTie(){
   var tie = true;
 
   for(var box in board) {
-      if( board[box].innerHTML === ' '){
+
+      if( isEmpty(board[box]) ){
         tie = false;
         break;
   		}
@@ -189,6 +218,16 @@ function checkIfTie(){
   else{
     return false;
   }
+}
+
+function isEmpty(box){
+
+	//if not X nor O
+	if( !(box.classList.contains('X') || box.classList.contains('O')) ){
+		return true;
+	}
+
+	return false;
 }
 
 /*
@@ -240,15 +279,23 @@ function machineMove(){
  */
 function playCenter(){
 
-  if(board.box22.innerHTML === ' '){
+  if( isEmpty(board.box22)){
 
-    board.box22.innerHTML = machine.side;
+    makeMove(machine,board.box22);
     return true;
   }
 
   return false;
 }
 
+function makeMove(who, where){
+
+	var img = document.createElement("img");
+	img.src = who.img;
+	where.appendChild(img);
+	// box.innerHTML = human.side;
+	where.classList.add(who.side);
+}
 
 /**
  * playOppositeCorner - check whehter the machine can play in an opposite corner
@@ -257,24 +304,24 @@ function playCenter(){
  */
 function playOppositeCorner(){
 
-  if(board.box11.innerHTML === human.side && board.box33.innerHTML === ' '){
+  if(board.box11.classList.contains(human.side) && isEmpty(board.box33)){
 
-    board.box33.innerHTML = machine.side;
+    makeMove(machine,board.box33);
     return true;
   }
-  else if(board.box33.innerHTML === human.side && board.box11.innerHTML === ' '){
+  else if(board.box33.classList.contains(human.side) && isEmpty(board.box11)){
 
-    board.box11.innerHTML = machine.side;
+    makeMove(machine,board.box11);
     return true;
   }
-  else if(board.box31.innerHTML === human.side && board.box13.innerHTML === ' '){
+  else if(board.box31.classList.contains(human.side) && isEmpty(board.box13)){
 
-    board.box13.innerHTML = machine.side;
+    makeMove(machine,board.box13);
     return true;
   }
-  else if(board.box13.innerHTML === human.side && board.box31.innerHTML === ' '){
+  else if(board.box13.classList.contains(human.side) && isEmpty(board.box31)){
 
-    board.box31.innerHTML = machine.side;
+    makeMove(machine,board.box31);
     return true;
   }
 
@@ -289,25 +336,25 @@ function playOppositeCorner(){
  */
 function playEmptyCorner(){
 
-  if(board.box11.innerHTML === ' '){
+  if(isEmpty(board.box11)){
 
-    board.box11.innerHTML = machine.side;
+    makeMove(machine,board.box11);
     return true;
   }
-  else if(board.box33.innerHTML === ' '){
+  else if(isEmpty(board.box33)){
 
-    board.box33.innerHTML = machine.side;
+    makeMove(machine,board.box33);
     return true;
   }
-  else if(board.box31.innerHTML === ' '){
+  else if(isEmpty(board.box31)){
 
-    board.box31.innerHTML = machine.side;
-    return true;
+    makeMove(machine,board.box31);
+		return true;
   }
-  else if(board.box13.innerHTML === ' '){
+  else if(isEmpty(board.box13)){
 
-    board.box13.innerHTML = machine.side;
-    return true;
+    makeMove(machine,board.box13);
+		return true;
   }
 
   return false;
@@ -320,24 +367,24 @@ function playEmptyCorner(){
  */
 function playEmptySide(){
 
-  if(board.box12.innerHTML === ' '){
+  if(isEmpty(board.box12)){
 
-    board.box12.innerHTML = machine.side;
+    makeMove(machine,board.box12);
     return true;
   }
-  else if(board.box21.innerHTML === ' '){
+  else if(isEmpty(board.box21)){
 
-    board.box21.innerHTML = machine.side;
-    return true;
+    makeMove(machine,board.box21);
+		return true;
   }
-  else if(board.box32.innerHTML === ' '){
+  else if(isEmpty(board.box32)){
 
-    board.box32.innerHTML = machine.side;
-    return true;
+    makeMove(machine,board.box32);
+		return true;
   }
-  else if(board.box23.innerHTML === ' '){
+  else if(isEmpty(board.box23)){
 
-    board.box23.innerHTML = machine.side;
+    makeMove(machine,board.box23);
     return true;
   }
 
@@ -345,7 +392,22 @@ function playEmptySide(){
 }
 
 
+/**
+ * checkClass2 - check whether 2 elements have one same class
+ *
+ * @param  {HTML element} box1
+ * @param  {HTML element} box2
+ * @return {boolean}      result
+ */
+function checkClass2(box1, box2){
 
+	if( (box1.classList.contains('X') && box2.classList.contains('X')) || (box1.classList.contains('O') && box2.classList.contains('O')) ){
+
+		return true;
+	}
+
+	return false;
+}
 
 /**
  * canWin - According to the mode variable this function checks whether the machine can
@@ -361,136 +423,136 @@ function checkBoardIf(mode){
     var checkingSide = mode === 'win' ? machine.side : human.side;
 
     // first row checking
-    if(board.box11.innerHTML === board.box12.innerHTML  && board.box12.innerHTML === checkingSide && board.box13.innerHTML === ' '){
+    if(checkClass2(board.box11, board.box12) && board.box12.classList.contains(checkingSide) && isEmpty(board.box13)){
 
-      board.box13.innerHTML = machine.side;
+      makeMove(machine,board.box13);
       return true;
     }
-    else if(board.box12.innerHTML === board.box13.innerHTML  && board.box13.innerHTML === checkingSide && board.box11.innerHTML === ' '){
+    else if(checkClass2(board.box12, board.box13) && board.box13.classList.contains(checkingSide) && isEmpty(board.box11)){
 
-      board.box11.innerHTML = machine.side;
+      makeMove(machine,board.box11);
       return true;
     }
-    else if(board.box11.innerHTML === board.box13.innerHTML  && board.box13.innerHTML === checkingSide && board.box12.innerHTML === ' '){
+    else if(checkClass2(board.box11, board.box13) && board.box13.classList.contains(checkingSide) && isEmpty(board.box12)){
 
-      board.box12.innerHTML = machine.side;
+      makeMove(machine,board.box12);
       return true;
     }
 
     // second row checking
-    else if(board.box21.innerHTML === board.box22.innerHTML  && board.box22.innerHTML === checkingSide && board.box23.innerHTML === ' '){
+    else if(checkClass2(board.box21, board.box22) && board.box22.classList.contains(checkingSide) && isEmpty(board.box23)){
 
-      board.box23.innerHTML = machine.side;
+      makeMove(machine,board.box23);
       return true;
     }
-    else if(board.box22.innerHTML === board.box23.innerHTML  && board.box23.innerHTML === checkingSide && board.box21.innerHTML === ' '){
+    else if(checkClass2(board.box22, board.box23) && board.box23.classList.contains(checkingSide) && isEmpty(board.box21)){
 
-      board.box21.innerHTML = machine.side;
+      makeMove(machine,board.box21);
       return true;
     }
-    else if(board.box21.innerHTML === board.box23.innerHTML  && board.box23.innerHTML === checkingSide && board.box22.innerHTML === ' '){
+    else if(checkClass2(board.box21, board.box23) && board.box23.classList.contains(checkingSide) && isEmpty(board.box22)){
 
-      board.box22.innerHTML = machine.side;
+      makeMove(machine,board.box22);
       return true;
     }
 
     // third row checking
-    else if(board.box31.innerHTML === board.box32.innerHTML  && board.box32.innerHTML === checkingSide && board.box33.innerHTML === ' '){
+    else if(checkClass2(board.box31, board.box32) && board.box32.classList.contains(checkingSide) && isEmpty(board.box33)){
 
-      board.box33.innerHTML = machine.side;
+      makeMove(machine,board.box33);
       return true;
     }
-    else if(board.box32.innerHTML === board.box33.innerHTML  && board.box33.innerHTML === checkingSide && board.box31.innerHTML === ' '){
+    else if(checkClass2(board.box32, board.box33) && board.box33.classList.contains(checkingSide) && isEmpty(board.box31)){
 
-      board.box31.innerHTML = machine.side;
+      makeMove(machine,board.box31);
       return true;
     }
-    else if(board.box31.innerHTML === board.box33.innerHTML  && board.box33.innerHTML === checkingSide && board.box32.innerHTML === ' '){
+    else if(checkClass2(board.box31, board.box33) && board.box33.classList.contains(checkingSide) && isEmpty(board.box32)){
 
-      board.box32.innerHTML = machine.side;
+      makeMove(machine,board.box32);
       return true;
     }
 
     // first column checking
-    else if(board.box11.innerHTML === board.box21.innerHTML  && board.box21.innerHTML === checkingSide && board.box31.innerHTML === ' '){
+    else if(checkClass2(board.box11, board.box21) && board.box21.classList.contains(checkingSide) && isEmpty(board.box31)){
 
-      board.box31.innerHTML = machine.side;
+      makeMove(machine,board.box31);
       return true;
     }
-    else if(board.box21.innerHTML === board.box31.innerHTML  && board.box31.innerHTML === checkingSide && board.box11.innerHTML === ' '){
+    else if(checkClass2(board.box21, board.box31) && board.box31.classList.contains(checkingSide) && isEmpty(board.box11)){
 
-      board.box11.innerHTML = machine.side;
+      makeMove(machine,board.box11);
       return true;
     }
-    else if(board.box11.innerHTML === board.box31.innerHTML  && board.box31.innerHTML === checkingSide && board.box21.innerHTML === ' '){
+    else if(checkClass2(board.box11, board.box31) && board.box31.classList.contains(checkingSide) && isEmpty(board.box21)){
 
-      board.box21.innerHTML = machine.side;
+      makeMove(machine,board.box21);
       return true;
     }
 
     // second column checking
-    else if(board.box12.innerHTML === board.box22.innerHTML  && board.box22.innerHTML === checkingSide && board.box32.innerHTML === ' '){
+    else if(checkClass2(board.box12, board.box22) && board.box22.classList.contains(checkingSide) && isEmpty(board.box32)){
 
-      board.box32.innerHTML = machine.side;
+      makeMove(machine,board.box32);
       return true;
     }
-    else if(board.box22.innerHTML === board.box32.innerHTML  && board.box32.innerHTML === checkingSide && board.box12.innerHTML === ' '){
+    else if(checkClass2(board.box22, board.box32) && board.box32.classList.contains(checkingSide) && isEmpty(board.box12)){
 
-      board.box12.innerHTML = machine.side;
+      makeMove(machine,board.box12);
       return true;
     }
-    else if(board.box12.innerHTML === board.box32.innerHTML  && board.box32.innerHTML === checkingSide && board.box22.innerHTML === ' '){
+    else if(checkClass2(board.box12, board.box32) && board.box32.classList.contains(checkingSide) && isEmpty(board.box22)){
 
-      board.box22.innerHTML = machine.side;
+      makeMove(machine,board.box22);
       return true;
     }
 
     // third column checking
-    else if(board.box13.innerHTML === board.box23.innerHTML  && board.box23.innerHTML === checkingSide && board.box33.innerHTML === ' '){
+    else if(checkClass2(board.box13, board.box23) && board.box23.classList.contains(checkingSide) && isEmpty(board.box33)){
 
-      board.box33.innerHTML = machine.side;
+      makeMove(machine,board.box33);
       return true;
     }
-    else if(board.box23.innerHTML === board.box33.innerHTML  && board.box33.innerHTML === checkingSide && board.box13.innerHTML === ' '){
+    else if(checkClass2(board.box23, board.box33) && board.box33.classList.contains(checkingSide) && isEmpty(board.box13)){
 
-      board.box13.innerHTML = machine.side;
+      makeMove(machine,board.box13);
       return true;
     }
-    else if(board.box13.innerHTML === board.box33.innerHTML  && board.box33.innerHTML === checkingSide && board.box23.innerHTML === ' '){
+    else if(checkClass2(board.box13, board.box33) && board.box33.classList.contains(checkingSide) && isEmpty(board.box23)){
 
-      board.box23.innerHTML = machine.side;
+      makeMove(machine,board.box23);
       return true;
     }
 
     // diagonals checking
-    else if(board.box11.innerHTML === board.box22.innerHTML  && board.box22.innerHTML === checkingSide && board.box33.innerHTML === ' '){
+    else if(checkClass2(board.box11, board.box22) && board.box22.classList.contains(checkingSide) && isEmpty(board.box33)){
 
-      board.box33.innerHTML = machine.side;
+      makeMove(machine,board.box33);
       return true;
     }
-    else if(board.box22.innerHTML === board.box33.innerHTML  && board.box33.innerHTML === checkingSide && board.box11.innerHTML === ' '){
+    else if(checkClass2(board.box22, board.box33) && board.box33.classList.contains(checkingSide) && isEmpty(board.box11)){
 
-      board.box11.innerHTML = machine.side;
+      makeMove(machine,board.box11);
       return true;
     }
-    else if(board.box13.innerHTML === board.box22.innerHTML  && board.box22.innerHTML === checkingSide && board.box31.innerHTML === ' '){
+    else if(checkClass2(board.box13, board.box22) && board.box22.classList.contains(checkingSide) && isEmpty(board.box31)){
 
-      board.box31.innerHTML = machine.side;
+      makeMove(machine,board.box31);
       return true;
     }
-    else if(board.box22.innerHTML === board.box31.innerHTML  && board.box31.innerHTML === checkingSide && board.box13.innerHTML === ' '){
+    else if(checkClass2(board.box22, board.box31) && board.box31.classList.contains(checkingSide) && isEmpty(board.box13)){
 
-      board.box13.innerHTML = machine.side;
+      makeMove(machine,board.box13);
       return true;
     }
-    else if(board.box11.innerHTML === board.box33.innerHTML  && board.box33.innerHTML === checkingSide && board.box22.innerHTML === ' '){
+    else if(checkClass2(board.box11, board.box33) && board.box33.classList.contains(checkingSide) && isEmpty(board.box22)){
 
-      board.box22.innerHTML = machine.side;
+      makeMove(machine,board.box22);
       return true;
     }
-    else if(board.box13.innerHTML === board.box31.innerHTML  && board.box31.innerHTML === checkingSide && board.box22.innerHTML === ' '){
+    else if(checkClass2(board.box13, board.box31) && board.box31.classList.contains(checkingSide) && isEmpty(board.box22)){
 
-      board.box22.innerHTML = machine.side;
+      makeMove(machine,board.box22);
       return true;
     }
 
