@@ -48,8 +48,8 @@ var game =
 	};
 
 
-/*
- * re-Iniatialize the game data in order to start over
+/**
+ * newGame - re-Iniatialize the game data in order to start over
  */
 function newGame(){
 
@@ -63,14 +63,7 @@ function newGame(){
 	board.box31.classList.remove("X","O"); board.box32.classList.remove("X","O"); board.box33.classList.remove("X","O");
 
 	// temp until we add pics
-	board.box11.removeChild(board.box11.firstChild); board.box12.removeChild(board.box12.firstChild); board.box13.removeChild(board.box13.firstChild);
-	board.box21.removeChild(board.box21.firstChild); board.box22.removeChild(board.box22.firstChild); board.box23.removeChild(board.box23.firstChild);
-	board.box31.removeChild(board.box31.firstChild); board.box32.removeChild(board.box32.firstChild); board.box33.removeChild(board.box33.firstChild);
-
-	// remove background color from winning boxes
-	// for(var box in board) {
-	// 	board[box].classList.remove("win");
-	// }
+	removeImages(board);
 
   if(game.turn === machine.side){
     machineMove();
@@ -78,8 +71,35 @@ function newGame(){
 
 }
 
-/*
- * Function that gets called when a player end his turn (pressed a box)
+/**
+ * removeImages - clear board from images in order to start a new game
+ *
+ * @param  {HTML element} board the game's board
+ */
+function removeImages(board){
+
+	for(var box in board) {
+		removeAllChildren(board[box]);
+	}
+}
+
+
+/**
+ * removeAllChildren - remove all element's children
+ *
+ * @param  {HTML element} box one of the board's boxes
+ */
+function removeAllChildren(box){
+
+	while (box.hasChildNodes()) {
+	    box.removeChild(box.lastChild);
+	}
+}
+
+/**
+ * humanMove - Function that gets called when a player end his turn (pressed a box)
+ *
+ * @param  {HTML element} box The board's box that got clicked by the user
  */
 function humanMove(box){
 
@@ -93,84 +113,6 @@ function humanMove(box){
 
   if(inGame()) machineMove();
 }
-
-/*
- * Function that check whether we have a winner
- * If we do then it ends the game
- * If not then the game goes on
- * NOTE: could join all this ifs into a big one
- */
-function checkBoard(){
-
-	var winner = null;
-
-	// check first row
-	if( !isEmpty(board.box11) && checkClass(board.box11, board.box12, board.box13)){
-
-		winner = board.box11.classList.contains('X') ? 'X' : 'O';
-		game.status = false;
-	}
-	// check second row
-	else if( !isEmpty(board.box21) && checkClass(board.box21, board.box22, board.box23)){
-
-		winner = board.box21.classList.contains('X') ? 'X' : 'O';
-		game.status = false;
-	}
-	// check third row
-	else if( !isEmpty(board.box31) && checkClass(board.box31, board.box32, board.box33)){
-
-		winner = board.box31.classList.contains('X') ? 'X' : 'O';
-		game.status = false;
-	}
-	// check first column
-	else if( !isEmpty(board.box11) && checkClass(board.box11, board.box21, board.box31)){
-
-		winner = board.box11.classList.contains('X') ? 'X' : 'O';
-		game.status = false;
-	}
-	// check second column
-	else if( !isEmpty(board.box12) && checkClass(board.box12, board.box22, board.box32)){
-
-		winner = board.box12.classList.contains('X') ? 'X' : 'O';
-		game.status = false;
-	}
-	// check third column
-	else if( !isEmpty(board.box13) && checkClass(board.box13, board.box23, board.box33)){
-
-		winner = board.box13.classList.contains('X') ? 'X' : 'O';
-		game.status = false;
-	}
-	// check main diagonal
-	else if( !isEmpty(board.box11) && checkClass(board.box11, board.box22, board.box33)){
-
-		winner = board.box11.classList.contains('X') ? 'X' : 'O';
-		game.status = false;
-	}
-	// check other diagonal
-	else if( !isEmpty(board.box31) && checkClass(board.box31, board.box22, board.box13)){
-
-		winner = board.box31.classList.contains('X') ? 'X' : 'O';
-		game.status = false;
-	}
-
-	if(!inGame()){
-
-    if(winner === human.side){
-      human.wins.innerHTML = parseInt(human.wins.innerHTML) +1;
-    }
-    else{
-      machine.wins.innerHTML = parseInt(human.wins.innerHTML);
-    }
-
-		// colorWinnerBoxes(winner);
-		window.alert(winner + ' WINS');
-	}
-  // if there was no winner found lets check whether all boxes are filled up by players (which means that we have a tie game)
-  else if(checkIfTie()){
-    window.alert('It\'s a TIE');
-  }
-}
-
 
 /**
  * checkClass - check whether 3 elements have one same class
@@ -191,6 +133,22 @@ function checkClass(box1, box2, box3){
 	return false;
 }
 
+/**
+ * checkClass2 - check whether 2 elements have one same class
+ *
+ * @param  {HTML element} box1
+ * @param  {HTML element} box2
+ * @return {boolean}      result
+ */
+function checkClass2(box1, box2){
+
+	if( (box1.classList.contains('X') && box2.classList.contains('X')) || (box1.classList.contains('O') && box2.classList.contains('O')) ){
+
+		return true;
+	}
+
+	return false;
+}
 
 /**
  * checkIfTie - Checks whether all board has been filled up.
@@ -391,29 +349,86 @@ function playEmptySide(){
   return false;
 }
 
-
-/**
- * checkClass2 - check whether 2 elements have one same class
- *
- * @param  {HTML element} box1
- * @param  {HTML element} box2
- * @return {boolean}      result
+/*
+ * Function that check whether we have a winner
+ * If we do then it ends the game
+ * If not then the game goes on
+ * NOTE: could join all this ifs into a big one
  */
-function checkClass2(box1, box2){
+function checkBoard(){
 
-	if( (box1.classList.contains('X') && box2.classList.contains('X')) || (box1.classList.contains('O') && box2.classList.contains('O')) ){
+	var winner = null;
 
-		return true;
+	// check first row
+	if( !isEmpty(board.box11) && checkClass(board.box11, board.box12, board.box13)){
+
+		winner = board.box11.classList.contains('X') ? 'X' : 'O';
+		game.status = false;
+	}
+	// check second row
+	else if( !isEmpty(board.box21) && checkClass(board.box21, board.box22, board.box23)){
+
+		winner = board.box21.classList.contains('X') ? 'X' : 'O';
+		game.status = false;
+	}
+	// check third row
+	else if( !isEmpty(board.box31) && checkClass(board.box31, board.box32, board.box33)){
+
+		winner = board.box31.classList.contains('X') ? 'X' : 'O';
+		game.status = false;
+	}
+	// check first column
+	else if( !isEmpty(board.box11) && checkClass(board.box11, board.box21, board.box31)){
+
+		winner = board.box11.classList.contains('X') ? 'X' : 'O';
+		game.status = false;
+	}
+	// check second column
+	else if( !isEmpty(board.box12) && checkClass(board.box12, board.box22, board.box32)){
+
+		winner = board.box12.classList.contains('X') ? 'X' : 'O';
+		game.status = false;
+	}
+	// check third column
+	else if( !isEmpty(board.box13) && checkClass(board.box13, board.box23, board.box33)){
+
+		winner = board.box13.classList.contains('X') ? 'X' : 'O';
+		game.status = false;
+	}
+	// check main diagonal
+	else if( !isEmpty(board.box11) && checkClass(board.box11, board.box22, board.box33)){
+
+		winner = board.box11.classList.contains('X') ? 'X' : 'O';
+		game.status = false;
+	}
+	// check other diagonal
+	else if( !isEmpty(board.box31) && checkClass(board.box31, board.box22, board.box13)){
+
+		winner = board.box31.classList.contains('X') ? 'X' : 'O';
+		game.status = false;
 	}
 
-	return false;
+	if(!inGame()){
+
+    if(winner === human.side){
+      human.wins.innerHTML = parseInt(human.wins.innerHTML) +1;
+    }
+    else{
+      machine.wins.innerHTML = parseInt(human.wins.innerHTML);
+    }
+
+		var dog = winner === 'X' ? 'Corgi' : 'Pug';
+		window.alert(dog + ' WINS');
+	}
+  // if there was no winner found lets check whether all boxes are filled up by players (which means that we have a tie game)
+  else if(checkIfTie()){
+    window.alert('It\'s a TIE');
+  }
 }
 
 /**
- * canWin - According to the mode variable this function checks whether the machine can
+ * checkBoardIf - According to the mode variable this function checks whether the machine can
  * win by marking a box or block the user from winning
- * TODO: 1. missing checks with gaps ['X' ' ' 'X']
- *       2. add label to every if-elseif
  *
  * @param  {String} mode 'win' =>check if can win, 'block' check if can block
  * @return {boolean}      'true' if there was a move, 'false' otherwise
@@ -558,19 +573,6 @@ function checkBoardIf(mode){
 
     return false;
 }
-
-
-/* NOTE: fails badly :P
- * Function that colors the winning boxes
- */
-// function colorWinnerBoxes(winnerType){
-//
-// 	for(var box in board) {
-// 		if( board[box].innerHTML === winnerType){
-// 			board[box].classList.add("win");
-// 		}
-// 	}
-// }
 
 /**
  * Greek flag :P
