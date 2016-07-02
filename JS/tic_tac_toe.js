@@ -398,7 +398,7 @@ function checkBoard() {
     if (winner === human.side) {
       human.wins.innerHTML = parseInt(human.wins.innerHTML) + 1;
     } else {
-      machine.wins.innerHTML = parseInt(human.wins.innerHTML);
+      machine.wins.innerHTML = parseInt(human.wins.innerHTML) + 1;
     }
 
     var dog = winner === 'X' ? 'Corgi' : 'Pug';
