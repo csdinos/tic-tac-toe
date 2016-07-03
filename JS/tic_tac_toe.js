@@ -66,6 +66,30 @@ function newGame() {
 
 }
 
+function changeSide(){
+
+  // swap sides
+  var temp = human.side;
+  human.side = machine.side;
+  machine.side = temp;
+
+  // swap side images
+  temp = human.img;
+  human.img = machine.img;
+  machine.img = temp;
+
+  // reset score
+  human.wins.innerHTML = machine.wins.innerHTML = 0;
+
+  // swap score labels
+  temp= human.wins;
+  human.wins = machine.wins;
+  machine.wins = temp;
+
+  // start game
+  newGame();
+}
+
 /**
  * removeImages - clear board from images in order to start a new game
  *
@@ -396,9 +420,9 @@ function checkBoard() {
   if (!inGame()) {
 
     if (winner === human.side) {
-      human.wins.innerHTML = parseInt(human.wins.innerHTML) + 1;
+      human.wins.innerHTML = +human.wins.innerHTML + 1;
     } else {
-      machine.wins.innerHTML = parseInt(human.wins.innerHTML) + 1;
+      machine.wins.innerHTML = +machine.wins.innerHTML + 1;
     }
 
     var dog = winner === 'X' ? 'Corgi' : 'Pug';
